@@ -20,7 +20,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-            self.display_surface.fill('black')
+            self.display_surface.fill('gray')
             self.visible_sprites.update()
             self.visible_sprites.draw(self.display_surface)
             pygame.display.update()
