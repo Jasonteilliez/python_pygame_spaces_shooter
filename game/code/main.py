@@ -2,6 +2,8 @@ import pygame, sys
 from time import time
 from settings import *
 from player import Player
+from star import Star
+from bullet import Bullet
 
 class Game:
     def __init__(self):
@@ -17,8 +19,23 @@ class Game:
         self.visible_sprites = pygame.sprite.Group()
         self.obstacle_sprites = pygame.sprite.Group()
 
-        self.player = Player(self.visible_sprites, self.scale)
+        for _ in range(20):
+            Star(self.visible_sprites, self.scale)
+        self.player = Player(self.visible_sprites, self.scale, self.attack_event)
+
         self.last_time = time()
+
+
+    def attack_event(self, bullet):
+        Bullet(
+            groups=self.visible_sprites, 
+            scale=self.scale, 
+            pos=bullet['pos'], 
+            direction=bullet['direction'], 
+            entity=bullet['entity'], 
+            bullet_type=bullet['bullet_type']
+        )
+
 
     def run(self):
 
@@ -36,7 +53,7 @@ class Game:
                         pygame.quit()
                         sys.exit()
                 
-            self.display_surface.fill('gray')
+            self.display_surface.fill('black')
             self.visible_sprites.update(dt = dt)
             self.visible_sprites.draw(self.display_surface)
             pygame.display.update()
