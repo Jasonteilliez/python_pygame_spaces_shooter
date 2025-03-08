@@ -1,7 +1,6 @@
 import pygame
 from os import path
 from settings import *
-from time import sleep
 from math import degrees, atan2
 
 class Player(pygame.sprite.Sprite):
@@ -17,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.pos =  pygame.math.Vector2(self.rect.center)
 
         self.direction = pygame.math.Vector2()
-        self.speed = 2
+        self.speed = 300
 
     
     def input(self):
@@ -38,12 +37,12 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0            
 
 
-    def move(self):
+    def move(self, dt):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
 
-        self.pos.x += self.direction.x * self.speed
-        self.pos.y += self.direction.y * self.speed
+        self.pos.x += self.direction.x * self.speed * dt
+        self.pos.y += self.direction.y * self.speed * dt
 
         self.rect.centerx = round(self.pos.x)
         self.rect.centery = round(self.pos.y)
@@ -61,7 +60,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.rect.center) 
     
 
-    def update(self):
+    def update(self, dt):
         self.input()
-        self.move()
+        self.move(dt)
         self.rotate()
