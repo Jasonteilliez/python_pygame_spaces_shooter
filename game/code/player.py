@@ -12,19 +12,23 @@ class Player(pygame.sprite.Sprite):
         basedir = path.dirname(path.dirname(__file__))
         path_to_image = path.join(basedir, "graphics", "player", "player.png")
 
-        display_surface = pygame.display.get_surface()
+        self.display_surface = pygame.display.get_surface()
         surf = pygame.image.load(path_to_image).convert_alpha()
         self.scale_surf = pygame.transform.scale(surf,pygame.math.Vector2(surf.get_size()) * self.scale)
         self.image = self.scale_surf
-        self.rect = self.image.get_rect(center = (display_surface.get_width()/2,display_surface.get_height()/2))
-        self.pos =  pygame.math.Vector2(self.rect.center)
+        self.rect = self.image.get_frect(center = (self.display_surface.get_width()/2,self.display_surface.get_height()/2))
 
         self.direction = pygame.math.Vector2()
-        self.speed = 300
 
         self.is_attacking = False
         self.attack_time = None
-        self.attack_cooldowns = 0.2
+
+        self.stats = {
+            'max_health': 5,
+            'dommage': 1,
+            'attack_speed': 0.5,
+            'mov_speed': 200
+        }
 
     
     def input(self):
@@ -54,12 +58,18 @@ class Player(pygame.sprite.Sprite):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
 
-        self.pos.x += self.direction.x * self.speed * dt * self.scale
-        self.pos.y += self.direction.y * self.speed * dt * self.scale
+        self.rect.centerx += self.direction.x * self.stats['mov_speed'] * dt * self.scale
+        if self.rect.left < 0:
+            self.rect.x = 0
+        elif self.rect.right > self.display_surface.get_width():
+            self.rect.x = self.display_surface.get_width() - self.rect.width
 
-        self.rect.centerx = round(self.pos.x)
-        self.rect.centery = round(self.pos.y)
-
+        self.rect.centery += self.direction.y * self.stats['mov_speed'] * dt * self.scale
+        if self.rect.top < 0:
+            self.rect.y = 0
+        elif self.rect.bottom > self.display_surface.get_height():
+            self.rect.y = self.display_surface.get_height() - self.rect.height
+        
     
     def rotate(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -70,7 +80,7 @@ class Player(pygame.sprite.Sprite):
         angle = - degrees(atan2(dx,-dy))
 
         self.image = pygame.transform.rotate(self.scale_surf, angle)
-        self.rect = self.image.get_rect(center=self.rect.center) 
+        self.rect = self.image.get_frect(center=self.rect.center) 
 
 
     def attack(self):
@@ -85,8 +95,8 @@ class Player(pygame.sprite.Sprite):
         direction = direction.normalize()
 
         pos = pygame.math.Vector2()
-        pos.x = self.pos.x + 20*direction.x*self.scale
-        pos.y = self.pos.y + 20*direction.y*self.scale
+        pos.x = self.rect.centerx + 15*direction.x*self.scale
+        pos.y = self.rect.centery + 15*direction.y*self.scale
 
         bullet={
             'pos': pos, 
@@ -101,7 +111,7 @@ class Player(pygame.sprite.Sprite):
         current_time = time()
 
         if self.is_attacking:
-            if current_time - self.attack_time >= self.attack_cooldowns:
+            if current_time - self.attack_time >= self.stats['attack_speed']:
                 self.is_attacking = False
 
     def update(self, dt):

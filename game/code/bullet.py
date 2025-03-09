@@ -10,7 +10,6 @@ class Bullet(pygame.sprite.Sprite):
         
         self.scale = scale
         self.bullet_type = bullet_type
-        self.pos = pos
         self.direction = direction
         self.entity = entity
         self.speed = 300
@@ -23,16 +22,12 @@ class Bullet(pygame.sprite.Sprite):
         surf = pygame.image.load(path_to_image).convert_alpha()
         self.scale_surf = pygame.transform.scale(surf,pygame.math.Vector2(surf.get_size()) * self.scale)
         self.image = self.scale_surf
-        self.pos =  pos
-        self.rect = self.image.get_rect(center = (self.pos.x, self.pos.y))
+        self.rect = self.image.get_frect(center = (pos.x, pos.y))
 
 
     def move(self, dt):
-        self.pos.x += self.direction.x * self.speed * dt * self.scale
-        self.pos.y += self.direction.y * self.speed * dt * self.scale
-
-        self.rect.centerx = round(self.pos.x)
-        self.rect.centery = round(self.pos.y)
+        self.rect.centerx += self.direction.x * self.speed * dt * self.scale
+        self.rect.centery += self.direction.y * self.speed * dt * self.scale
 
 
     def bullet_kill(self):
