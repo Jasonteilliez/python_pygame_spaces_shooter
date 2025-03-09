@@ -4,6 +4,8 @@ from settings import *
 from player import Player
 from star import Star
 from bullet import Bullet
+from enemy import Enemy
+from random import randint
 
 class Game:
     def __init__(self):
@@ -21,6 +23,8 @@ class Game:
 
         for _ in range(20):
             Star(self.visible_sprites, self.scale)
+        self.spawn_enemy_event()
+
         self.player = Player(self.visible_sprites, self.scale, self.attack_event)
 
         self.last_time = time()
@@ -34,6 +38,14 @@ class Game:
             direction=bullet['direction'], 
             entity=bullet['entity'], 
             bullet_type=bullet['bullet_type']
+        )
+
+    
+    def spawn_enemy_event(self):
+        Enemy(
+            groups=self.visible_sprites, 
+            scale=self.scale, 
+            enemy_type="small_asteroid"
         )
 
 
