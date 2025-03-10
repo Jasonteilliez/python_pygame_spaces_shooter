@@ -1,0 +1,36 @@
+{
+    "player":{
+        "spritesheet":"player_spritesheet",
+        "animated":false,
+        "sprites":[
+            {"x":0,"y":0,"width":32,"height":32}
+        ]
+    },
+    "small_star":{
+        "spritesheet":"star_spritesheet",
+        "animated":false,
+        "sprites":[
+            {"x":0,"y":0,"width":8,"height":8},
+            {"x":8,"y":0,"width":8,"height":8},
+            {"x":16,"y":0,"width":8,"height":8},
+            {"x":24,"y":0,"width":8,"height":8}
+        ]
+    },
+    "small_asteroid":{
+        "spritesheet":"asteroid_spritesheet",
+        "animated":false,
+        "sprites":[
+            {"x":0,"y":0,"width":32,"height":32},
+            {"x":32,"y":0,"width":32,"height":32},
+            {"x":64,"y":0,"width":32,"height":32},
+            {"x":96,"y":0,"width":32,"height":32}
+        ]
+    },
+    "small_red_bullet":{
+        "spritesheet":"bullet_spritesheet",
+        "animated":false,
+        "sprites":[
+            {"x":0,"y":0,"width":8,"height":8}
+        ]
+    }
+}

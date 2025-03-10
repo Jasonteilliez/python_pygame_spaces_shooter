@@ -1,36 +1,36 @@
 import pygame
-from os import path
 from math import degrees, atan2
 from time import time
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, groups, scale, attack_event):
-        super().__init__(groups)
-        self.scale = scale
-        self.attack_event = attack_event
 
-        basedir = path.dirname(path.dirname(__file__))
-        path_to_image = path.join(basedir, "graphics", "player", "player.png")
+class Player(pygame.sprite.Sprite):
+    def __init__(self, groups, scale, surf, pos, attack_event):
+        super().__init__(groups)
 
         self.display_surface = pygame.display.get_surface()
-        surf = pygame.image.load(path_to_image).convert_alpha()
-        self.scale_surf = pygame.transform.scale(surf,pygame.math.Vector2(surf.get_size()) * self.scale)
-        self.image = self.scale_surf
-        self.rect = self.image.get_frect(center = (self.display_surface.get_width()/2,self.display_surface.get_height()/2))
+        self.scale = scale
+        self.surf = surf
+        self.scale_surf = pygame.transform.scale(surf,pygame.math.Vector2(surf.get_size()) * scale)
+        self.image = self.surf
+        self.rect = self.image.get_frect(center = (pos['x'], pos['y']))
 
         self.direction = pygame.math.Vector2()
 
-        self.is_attacking = False
-        self.attack_time = None
-
         self.stats = {
             'max_health': 5,
-            'dommage': 1,
+            'attack_dommage': 1,
             'attack_speed': 0.5,
+            'impact_dommage': 1,
             'mov_speed': 200
         }
 
-    
+        self.attack_event=attack_event
+        self.is_attacking = False
+        self.attack_time = None
+
+        self.current_health = self.stats['max_health']
+
+
     def input(self):
         keys = pygame.key.get_pressed()
         
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE] and not self.is_attacking:
             self.is_attacking = True
             self.attack_time = time()
-            self.attack()         
+            self.attack()  
 
 
     def move(self, dt):
@@ -69,8 +69,8 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = 0
         elif self.rect.bottom > self.display_surface.get_height():
             self.rect.y = self.display_surface.get_height() - self.rect.height
-        
-    
+
+
     def rotate(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
@@ -94,15 +94,18 @@ class Player(pygame.sprite.Sprite):
         direction.y = dy
         direction = direction.normalize()
 
-        pos = pygame.math.Vector2()
-        pos.x = self.rect.centerx + 15*direction.x*self.scale
-        pos.y = self.rect.centery + 15*direction.y*self.scale
+        pos = {
+         'x': self.rect.centerx + 15*direction.x*self.scale,
+         'y': self.rect.centery + 15*direction.y*self.scale
+        }
 
         bullet={
             'pos': pos, 
             'direction': direction, 
-            'entity': 'player_bullet', 
-            'bullet_type': 'small_bullet'
+            'alliance': 'player', 
+            'name': 'small_red_bullet',
+            'speed': 300,
+            'dommage':self.stats['attack_dommage']
         }
         self.attack_event(bullet)
 
