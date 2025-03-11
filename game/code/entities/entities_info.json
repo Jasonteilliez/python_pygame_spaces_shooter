@@ -1,5 +1,6 @@
 {
     "player":{
+        "entity_type":"player",
         "base_stats":{
             "max_health": 5,
             "attack_dommage": 1,
@@ -9,8 +10,9 @@
         }
     },
     "small_asteroid":{
+        "entity_type":"asteroid",
         "base_stats":{
-            "max_heath":1,
+            "max_health":1,
             "impact_dommage":1
         },
         "mov_speed_min":50,
@@ -19,8 +21,9 @@
         "rotation_speed_max":300
     },
     "medium_asteroid":{
+        "entity_type":"asteroid",
         "base_stats":{
-            "max_heath":3,
+            "max_health":3,
             "impact_dommage":1
         },
         "mov_speed_min":50,
@@ -29,13 +32,22 @@
         "rotation_speed_max":225
     },
     "large_asteroid":{
+        "entity_type":"asteroid",
         "base_stats":{
-            "max_heath":5,
+            "max_health":5,
             "impact_dommage":1
         },
         "mov_speed_min":50,
         "mov_speed_max":150,
         "rotation_speed_min":50,
         "rotation_speed_max":150
+    },
+    "small_red_bullet":{
+        "entity_type":"bullet",
+        "base_stats":{}
+    },
+    "small_star":{
+        "entity_type":"star",
+        "base_stats":{}
     }
 }

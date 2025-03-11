@@ -15,35 +15,50 @@ class Level:
         self.last_time = time()
         self.spawner = Spawner()
 
-        self.spawn_small_star()
-        self.player = self.spawner.spawn_player(self.visible_sprites,self.scale, self.attack_event)
-        for _ in range(10):
-            self.spawn_asteroid()
-
-    def spawn_small_star(self):
         for _ in range(20):
-            self.spawner.spawn_small_star(self.visible_sprites,self.scale)
+            self.spawn_entity(name="small_star", data={})
+        self.spawn_entity(name="player", data={
+            'alliance':'player',
+            'attack_event':self.attack_event
+        })
+
+
+        for _ in range(10):
+            self.spawn_entity(name='small_asteroid', data={
+                'alliance':'neutral'
+            })
+        for _ in range(5):
+            self.spawn_entity(name="medium_asteroid", data={
+                'alliance':'neutral'
+            })
+        for _ in range(2):
+            self.spawn_entity(name="large_asteroid", data={
+                'alliance':'neutral'
+            })   
+
+
+    def spawn_entity(self, name, data, pos=None):
+            self.spawner.spawn_entity(
+                groups=self.visible_sprites,
+                scale=self.scale, 
+                name=name, 
+                data=data,
+                pos=pos
+            )
 
 
     def attack_event(self, bullet):
-        self.spawner.spawn_bullet(
+        self.spawner.spawn_entity(
             groups=self.visible_sprites,
             scale=self.scale, 
-            alliance=bullet['alliance'], 
             name=bullet['name'], 
-            direction=bullet['direction'], 
-            speed=bullet['speed'], 
-            pos=bullet['pos'], 
-            dommage=bullet['dommage']
-        )
-
-    
-    def spawn_asteroid(self):
-        self.spawner.spawn_asteroid(
-            groups=self.visible_sprites,
-            scale=self.scale,
-            alliance='neutral',
-            name='small_asteroid'
+            data={
+                'alliance':bullet['alliance'], 
+                'direction':bullet['direction'], 
+                'speed':bullet['speed'], 
+                'pos':bullet['pos'], 
+                'dommage':bullet['dommage']
+            }
         )
 
 

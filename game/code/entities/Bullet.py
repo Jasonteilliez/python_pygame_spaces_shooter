@@ -2,14 +2,13 @@ import pygame
 from entities.EntitiesBase import EntitiesBase
 
 class Bullet(EntitiesBase):
-    def __init__(self, groups, scale, surf, pos, alliance, direction, speed, dommage):
+    def __init__(self, groups, scale, surf, pos, data):
         super().__init__(groups, scale, surf, pos)
 
-        self.direction = direction
-        self.speed = speed
-
-        self.alliance = alliance
-        self.dommage = dommage
+        self.alliance = data['alliance']
+        self.direction = data['direction']
+        self.speed = data['speed']
+        self.dommage = data['dommage']
 
 
     def move(self, dt):
@@ -18,8 +17,8 @@ class Bullet(EntitiesBase):
 
 
     def bullet_kill(self):
-        if self.rect.bottom <= 0 or self.rect.top >= self.display_surface.get_height() or \
-        self.rect.left <= 0 or self.rect.right >= self.display_surface.get_width():
+        if self.rect.bottom <= -100 or self.rect.top >= self.display_surface.get_height() + 100 or \
+        self.rect.left <= -100 or self.rect.right >= self.display_surface.get_width() + 100:
             self.kill()
 
 

@@ -3,20 +3,18 @@ from random import randint
 from entities.EntitiesBase import EntitiesBase
 
 class Asteroid(EntitiesBase):
-    def __init__(self, groups, scale, surf, pos, direction, speed, rotation_speed, alliance):
+    def __init__(self, groups, scale, surf, pos, data):
         super().__init__(groups, scale, surf, pos)
 
-        self.direction=direction
-        self.speed=speed
-        self.rotation_speed=rotation_speed
-        self.alliance=alliance
+        self.alliance=data['alliance']
 
+        self.direction= data['direction']
+        self.speed=data['speed']
+        self.rotation_speed=data['rotation_speed']
         self.angle=0
 
-        self.stats = {
-            'max_health': 1,
-            'impact_dommage': 1,
-        }
+        self.stats = data['stats']
+        self.health = self.stats['max_health']
 
 
     def move(self, dt):

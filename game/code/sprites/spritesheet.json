@@ -1,0 +1,18 @@
+{
+    "player_spritesheet":{
+        "folder":"player",
+        "file":"player.png"
+    },
+    "star_spritesheet":{
+        "folder":"environment",
+        "file":"star.png" 
+    },
+    "bullet_spritesheet": {
+        "folder":"bullet",
+        "file":"bullet.png" 
+    },
+    "asteroid_spritesheet": {
+        "folder":"enemy",
+        "file":"asteroid.png" 
+    }
+}

@@ -5,23 +5,15 @@ from entities.EntitiesBase import EntitiesBase
 
 
 class Player(EntitiesBase):
-    def __init__(self, groups, scale, surf, pos, attack_event):
+    def __init__(self, groups, scale, surf, pos, data):
         super().__init__(groups, scale, surf, pos)
 
+        self.alliance = data['alliance']
         self.direction = pygame.math.Vector2()
-
-        self.stats = {
-            'max_health': 5,
-            'attack_dommage': 1,
-            'attack_speed': 0.5,
-            'impact_dommage': 1,
-            'mov_speed': 200
-        }
-
-        self.attack_event=attack_event
+        self.stats = data['stats']
+        self.attack_event=data['attack_event']
         self.is_attacking = False
         self.attack_time = None
-
         self.current_health = self.stats['max_health']
 
 

@@ -14,126 +14,118 @@ class Spawner:
         self.basedir = path.dirname(path.dirname(path.dirname(__file__)))
         self.display_surface = pygame.display.get_surface()
 
-        self.path_to_sprite = path.join(self.basedir, "code", "sprites", "sprites.json")
-        with open(self.path_to_sprite) as json_sprites:
-            self.sprite_data = load(json_sprites)
-
-        self.path_to_stats = path.join(self.basedir, "code", "entities", "stats.json") 
-        with open(self.path_to_stats) as json_stats:
-            self.stats_data = load(json_stats) 
-
-        self.player_spritesheet_path = path.join(self.basedir, "graphics", "player", "player.png")
-        self.star_spritesheet_path = path.join(self.basedir, "graphics", "environment", "star.png")
-        self.bullet_spritesheet_path = path.join(self.basedir, "graphics", "bullet", "bullet.png")
-        self.asteroid_spritesheet_path = path.join(self.basedir, "graphics", "enemy", "asteroid.png")
-
-        self.player_spritesheet = pygame.image.load(self.player_spritesheet_path).convert_alpha()
-        self.star_spritesheet = pygame.image.load(self.star_spritesheet_path).convert_alpha()
-        self.bullet_spritesheet = pygame.image.load(self.bullet_spritesheet_path).convert_alpha()
-        self.asteroid_spritesheet = pygame.image.load(self.asteroid_spritesheet_path).convert_alpha()
+        self.entities_type = self.init_entities_type()
+        self.spritesheet = self.init_spritesheet()
+        self.sprite_data = self.init_sprite_data()
+        self.stats_data = self.init_stats_data()
 
 
-    def spawn_player(self, groups, scale, attack_event):
-        name = "player"
-        spritesheet = self.sprite_data[name]['spritesheet']
-        sprites_list = self.sprite_data[name]['sprites']
-        sprites = self.get_basic_sprite(spritesheet, sprites_list)
+    def init_spritesheet(self):
+        path_to_spritesheet = path.join(self.basedir, "code", "sprites", "spritesheet.json")
+        with open(path_to_spritesheet)as json_spritesheet:
+            spritesheet_data = load(json_spritesheet)
 
-        pos={
-            'x':self.display_surface.get_width()/2,
-            'y':self.display_surface.get_height()/2
-        }
-        return Player(
-            groups=groups,
-            scale=scale,
-            surf=choice(sprites),
-            pos=pos,
-            attack_event=attack_event
-        )
+        spritesheet = {}
+        for key, value in spritesheet_data.items():
+            spritesheet_path = path.join(self.basedir, "graphics", value['folder'], value['file'])
+            spritesheet[key] = pygame.image.load(spritesheet_path).convert_alpha()
+        
+        return spritesheet
 
 
-    def spawn_small_star(self, groups,scale):
-        name = "small_star"
-        spritesheet = self.sprite_data[name]['spritesheet']
-        sprites_list = self.sprite_data[name]['sprites']
-        sprites = self.get_basic_sprite(spritesheet, sprites_list)
-
-        pos={
-            'x':randint(0,self.display_surface.get_width()),
-            'y':randint(0,self.display_surface.get_height())
+    def init_entities_type(self):
+        return {
+            "player": Player,
+            "star": Star,
+            "asteroid": Asteroid,
+            "bullet": Bullet
         }
 
-        return Star(
-            groups=groups,
-            scale=scale,
-            surf=choice(sprites),
-            pos=pos,
-        )
+
+    def init_sprite_data(self):
+        path_to_sprite = path.join(self.basedir, "code", "sprites", "sprites.json") 
+        with open(path_to_sprite) as json_sprite:
+            sprite_data = load(json_sprite) 
+        return sprite_data
+    
+
+    def init_stats_data(self):
+        path_to_stats = path.join(self.basedir, "code", "entities", "entities_info.json") 
+        with open(path_to_stats) as json_stats:
+            stats_data = load(json_stats) 
+        return stats_data
 
 
-    def spawn_bullet(self, groups, scale, alliance, name, direction, speed, pos, dommage):
+    def spawn_entity(self, groups, scale, name, data, pos = None):
+        # Base #
         name = name
         spritesheet = self.sprite_data[name]['spritesheet']
         sprites_list = self.sprite_data[name]['sprites']
         sprites = self.get_basic_sprite(spritesheet, sprites_list)
+        surf = choice(sprites)
+        entity_type = self.stats_data[name]['entity_type']
+        entity = self.entities_type[entity_type]
 
-        return Bullet(
+        # Init #
+        pos, data = self.options(entity_type, name, data, pos)
+
+        # Return #
+        return entity(
             groups=groups,
             scale=scale,
-            surf=choice(sprites),
+            surf=surf,
             pos=pos,
-            direction=direction,
-            speed=speed,
-            dommage=dommage,
-            alliance=alliance
+            data=data
         )
 
 
-    def spawn_asteroid(self, groups, scale, alliance, name):
-        name = name
-        spritesheet = self.sprite_data[name]['spritesheet']
-        sprites_list = self.sprite_data[name]['sprites']
-        sprites = self.get_basic_sprite(spritesheet, sprites_list)
-
-        pos = self.get_random_outside_spawn_position()
-        direction = pygame.math.Vector2(randint(-10,10),randint(-10,10))
-        direction = direction.normalize()
-        speed = randint(50,300)
-        rotation_speed = choice([randint(-300,-50),randint(50,300)])
-
-        return Asteroid(
-            groups = groups,
-            scale = scale,
-            surf = choice(sprites),
-            pos = pos,
-            direction = direction,
-            speed = speed,
-            rotation_speed = rotation_speed,
-            alliance = alliance
-        )
+    def options(self, entity_type, name, data, pos):
+        match entity_type:
+            case "player":
+                stats = self.stats_data[name]
+                if not pos:
+                    pos={
+                        'x':self.display_surface.get_width()/2,
+                        'y':self.display_surface.get_height()/2
+                    }
+                data['stats'] = stats['base_stats']
+            case "star":
+                if not pos:
+                    pos={
+                        'x':randint(0,self.display_surface.get_width()),
+                        'y':randint(0,self.display_surface.get_height())
+                    }
+            case "bullet":
+                if not pos:
+                    pos = data['pos']
+            case "asteroid":
+                stats = self.stats_data[name]
+                if not pos:
+                    pos = self.get_random_outside_spawn_position()
+                direction = pygame.math.Vector2(randint(-10,10),randint(-10,10))
+                direction = direction.normalize()
+                speed = randint(stats['mov_speed_min'],stats['mov_speed_max'])
+                rotation_speed = choice([
+                    randint(-stats['rotation_speed_max'],-stats['rotation_speed_min']),
+                    randint(stats['rotation_speed_min'],stats['rotation_speed_max'])
+                    ])
+                data={
+                    'direction':direction,
+                    'speed':speed,
+                    'rotation_speed':rotation_speed,
+                    'alliance':data['alliance'],
+                    'stats':stats['base_stats']
+                }
+        return (pos, data)
 
 
     def get_basic_sprite(self, spritesheet, sprites_list):
-        spritesheet = self.get_spritesheet(spritesheet)
+        spritesheet = self.spritesheet[spritesheet]
         sprites = []
         for s in sprites_list:
             sprite = spritesheet.subsurface(pygame.Rect(s['x'],s['y'],s['width'],s['height']))
             sprites.append(sprite)
         return sprites
-
-
-    def get_spritesheet(self, spritesheet):
-        match spritesheet:
-            case 'star_spritesheet':
-                return self.star_spritesheet
-            case 'player_spritesheet':
-                return self.player_spritesheet
-            case 'bullet_spritesheet':
-                return self.bullet_spritesheet
-            case 'asteroid_spritesheet':
-                return self.asteroid_spritesheet
-            case _:
-                print(f"Spritesheet {spritesheet} not found")
             
 
     def get_random_outside_spawn_position(self):
