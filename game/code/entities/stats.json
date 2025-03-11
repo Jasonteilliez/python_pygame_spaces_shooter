@@ -1,19 +1,41 @@
 {
     "player":{
-        "max_health": 5,
-        "attack_dommage": 1,
-        "attack_speed": 0.5,
-        "impact_dommage": 1,
-        "mov_speed": 200
+        "base_stats":{
+            "max_health": 5,
+            "attack_dommage": 1,
+            "attack_speed": 0.5,
+            "impact_dommage": 1,
+            "mov_speed": 200
+        }
     },
-    "small_star":{},
     "small_asteroid":{
-        "max_heath":1,
-        "impact_dommage":1,
+        "base_stats":{
+            "max_heath":1,
+            "impact_dommage":1
+        },
         "mov_speed_min":50,
         "mov_speed_max":300,
         "rotation_speed_min":50,
         "rotation_speed_max":300
     },
-    "small_red_bullet":{}
+    "medium_asteroid":{
+        "base_stats":{
+            "max_heath":3,
+            "impact_dommage":1
+        },
+        "mov_speed_min":50,
+        "mov_speed_max":225,
+        "rotation_speed_min":50,
+        "rotation_speed_max":225
+    },
+    "large_asteroid":{
+        "base_stats":{
+            "max_heath":5,
+            "impact_dommage":1
+        },
+        "mov_speed_min":50,
+        "mov_speed_max":150,
+        "rotation_speed_min":50,
+        "rotation_speed_max":150
+    }
 }

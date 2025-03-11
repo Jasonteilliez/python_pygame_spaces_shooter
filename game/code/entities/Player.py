@@ -1,18 +1,12 @@
 import pygame
 from math import degrees, atan2
 from time import time
+from entities.EntitiesBase import EntitiesBase
 
 
-class Player(pygame.sprite.Sprite):
+class Player(EntitiesBase):
     def __init__(self, groups, scale, surf, pos, attack_event):
-        super().__init__(groups)
-
-        self.display_surface = pygame.display.get_surface()
-        self.scale = scale
-        self.surf = surf
-        self.scale_surf = pygame.transform.scale(surf,pygame.math.Vector2(surf.get_size()) * scale)
-        self.image = self.surf
-        self.rect = self.image.get_frect(center = (pos['x'], pos['y']))
+        super().__init__(groups, scale, surf, pos)
 
         self.direction = pygame.math.Vector2()
 

@@ -18,6 +18,10 @@ class Spawner:
         with open(self.path_to_sprite) as json_sprites:
             self.sprite_data = load(json_sprites)
 
+        self.path_to_stats = path.join(self.basedir, "code", "entities", "stats.json") 
+        with open(self.path_to_stats) as json_stats:
+            self.stats_data = load(json_stats) 
+
         self.player_spritesheet_path = path.join(self.basedir, "graphics", "player", "player.png")
         self.star_spritesheet_path = path.join(self.basedir, "graphics", "environment", "star.png")
         self.bullet_spritesheet_path = path.join(self.basedir, "graphics", "bullet", "bullet.png")

@@ -1,17 +1,11 @@
 import pygame
 from random import randint
+from entities.EntitiesBase import EntitiesBase
 
-
-class Asteroid(pygame.sprite.Sprite):
+class Asteroid(EntitiesBase):
     def __init__(self, groups, scale, surf, pos, direction, speed, rotation_speed, alliance):
-        super().__init__(groups)
+        super().__init__(groups, scale, surf, pos)
 
-        self.display_surface = pygame.display.get_surface()
-        self.scale = scale
-        self.surf = surf
-        self.scale_surf = pygame.transform.scale(surf,pygame.math.Vector2(surf.get_size()) * scale)
-        self.image = self.surf
-        self.rect = self.image.get_frect(center = (pos['x'], pos['y']))
         self.direction=direction
         self.speed=speed
         self.rotation_speed=rotation_speed
@@ -27,20 +21,20 @@ class Asteroid(pygame.sprite.Sprite):
 
     def move(self, dt):
         self.rect.centerx += self.direction.x * self.speed * dt * self.scale
-        if self.rect.left < -100:
-            self.rect.x = -100
-            self.direction.x = - self.direction.x
-        elif self.rect.right > self.display_surface.get_width()+100:
+        if self.rect.right < -100:
             self.rect.x = self.display_surface.get_width() - self.rect.width + 100
-            self.direction.x = - self.direction.x
+            self.rect.y = randint(-50, self.display_surface.get_height()+50)
+        elif self.rect.left > self.display_surface.get_width()+100:
+            self.rect.x = - 100
+            self.rect.y = randint(-50, self.display_surface.get_height()+50)
 
         self.rect.centery += self.direction.y * self.speed * dt * self.scale
-        if self.rect.top < -100:
-            self.rect.y = -100
-            self.direction.y = - self.direction.y
-        elif self.rect.bottom > self.display_surface.get_height() + 100:
+        if self.rect.bottom < -100:
             self.rect.y = self.display_surface.get_height() - self.rect.height + 100
-            self.direction.y = - self.direction.y
+            self.rect.x = randint(-50, self.display_surface.get_width()+50)
+        elif self.rect.top > self.display_surface.get_height() + 100:
+            self.rect.y = - 100
+            self.rect.x = randint(-50, self.display_surface.get_width()+50)
 
 
     def rotate(self, dt):
