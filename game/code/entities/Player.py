@@ -13,6 +13,15 @@ class Player(EntitiesBase):
         self.attack_event=data['attack_event']
         self.is_attacking = False
         self.attack_time = None
+        self.player_bullet_sprites = data['player_bullet_sprites']
+
+        self.stats = {
+            "max_health": data['stats']['max_health'],
+            "attack_dommage": data['stats']['attack_dommage'],
+            "attack_speed": data['stats']['attack_speed'],
+            "impact_dommage": data['stats']['impact_dommage'],
+            "mov_speed": data['stats']['mov_speed']
+        }
         self.current_health = self.stats['max_health']
 
 
@@ -65,7 +74,8 @@ class Player(EntitiesBase):
         angle = - degrees(atan2(dx,-dy))
 
         self.image = pygame.transform.rotate(self.scale_surf, angle)
-        self.rect = self.image.get_frect(center=self.rect.center) 
+        self.rect = self.image.get_frect(center=self.rect.center)
+        self.mask = pygame.mask.from_surface(self.image) 
 
 
     def attack(self):
@@ -85,12 +95,13 @@ class Player(EntitiesBase):
         }
 
         bullet={
+            'groups': self.player_bullet_sprites,
             'pos': pos, 
             'direction': direction, 
-            'alliance': 'player', 
+            'alliance': 'player_bullet', 
             'name': 'small_red_bullet',
             'speed': 300,
-            'dommage':self.stats['attack_dommage']
+            'impact_dommage':self.stats['attack_dommage']
         }
         self.attack_event(bullet)
 

@@ -12,6 +12,8 @@ class EntitiesBase(pygame.sprite.Sprite):
         self.image = self.surf
         self.rect = self.image.get_frect(center = (pos['x'], pos['y']))
 
+        self.mask = pygame.mask.from_surface(self.image)
+
         self.alliance = alliance
         self.order = order
 

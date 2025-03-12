@@ -6,13 +6,16 @@ class Bullet(EntitiesBase):
         super().__init__(groups, scale, surf, pos, alliance, order)
 
         self.direction = data['direction']
-        self.speed = data['speed']
-        self.dommage = data['dommage']
+
+        self.stats = {
+            "impact_dommage": data['impact_dommage'],
+            "mov_speed":data['speed']
+        }
 
 
     def move(self, dt):
-        self.rect.centerx += self.direction.x * self.speed * dt * self.scale
-        self.rect.centery += self.direction.y * self.speed * dt * self.scale
+        self.rect.centerx += self.direction.x * self.stats["mov_speed"] * dt * self.scale
+        self.rect.centery += self.direction.y * self.stats["mov_speed"] * dt * self.scale
 
 
     def bullet_kill(self):

@@ -1,0 +1,14 @@
+{
+    "1":{
+        "small_asteroid":[5, "neutral"]
+    },
+    "2":{
+        "small_asteroid":[7, "neutral"],
+        "medium_asteroid":[3, "neutral"]
+    },
+    "3":{
+        "small_asteroid":[10, "neutral"],
+        "medium_asteroid":[5, "neutral"],
+        "large_asteroid":[3, "neutral"]
+    }
+}
