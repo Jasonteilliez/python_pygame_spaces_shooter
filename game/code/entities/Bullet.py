@@ -2,10 +2,9 @@ import pygame
 from entities.EntitiesBase import EntitiesBase
 
 class Bullet(EntitiesBase):
-    def __init__(self, groups, scale, surf, pos, data):
-        super().__init__(groups, scale, surf, pos)
+    def __init__(self, groups, scale, surf, pos, alliance, order, data):
+        super().__init__(groups, scale, surf, pos, alliance, order)
 
-        self.alliance = data['alliance']
         self.direction = data['direction']
         self.speed = data['speed']
         self.dommage = data['dommage']

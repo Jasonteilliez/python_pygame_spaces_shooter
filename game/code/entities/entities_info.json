@@ -1,6 +1,7 @@
 {
     "player":{
         "entity_type":"player",
+        "order":"player",
         "base_stats":{
             "max_health": 5,
             "attack_dommage": 1,
@@ -11,6 +12,7 @@
     },
     "small_asteroid":{
         "entity_type":"asteroid",
+        "order":"enemy",
         "base_stats":{
             "max_health":1,
             "impact_dommage":1
@@ -22,6 +24,7 @@
     },
     "medium_asteroid":{
         "entity_type":"asteroid",
+        "order":"enemy",
         "base_stats":{
             "max_health":3,
             "impact_dommage":1
@@ -33,6 +36,7 @@
     },
     "large_asteroid":{
         "entity_type":"asteroid",
+        "order":"enemy",
         "base_stats":{
             "max_health":5,
             "impact_dommage":1
@@ -44,10 +48,12 @@
     },
     "small_red_bullet":{
         "entity_type":"bullet",
+        "order":"bullet",
         "base_stats":{}
     },
     "small_star":{
         "entity_type":"star",
+        "order":"environment",
         "base_stats":{}
     }
 }

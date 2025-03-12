@@ -10,14 +10,17 @@ from entities.Asteroid import Asteroid
 
 
 class Spawner:
-    def __init__(self):
+    def __init__(self, visible_sprite):
         self.basedir = path.dirname(path.dirname(path.dirname(__file__)))
         self.display_surface = pygame.display.get_surface()
+        self.visible_sprite = visible_sprite
 
         self.entities_type = self.init_entities_type()
         self.spritesheet = self.init_spritesheet()
         self.sprite_data = self.init_sprite_data()
         self.stats_data = self.init_stats_data()
+
+        self.order = {'environment': 0, 'enemy': 1, 'bullet': 2, 'player': 3}
 
 
     def init_spritesheet(self):
@@ -56,13 +59,14 @@ class Spawner:
         return stats_data
 
 
-    def spawn_entity(self, groups, scale, name, data, pos = None):
+    def spawn_entity(self, groups, scale, name, alliance, data = {}, pos = None):
         # Base #
         name = name
         spritesheet = self.sprite_data[name]['spritesheet']
         sprites_list = self.sprite_data[name]['sprites']
         sprites = self.get_basic_sprite(spritesheet, sprites_list)
         surf = choice(sprites)
+        order = self.order[self.stats_data[name]['order']]
         entity_type = self.stats_data[name]['entity_type']
         entity = self.entities_type[entity_type]
 
@@ -74,10 +78,11 @@ class Spawner:
             groups=groups,
             scale=scale,
             surf=surf,
+            order=order,
+            alliance=alliance,
             pos=pos,
             data=data
         )
-
 
     def options(self, entity_type, name, data, pos):
         match entity_type:
@@ -113,7 +118,6 @@ class Spawner:
                     'direction':direction,
                     'speed':speed,
                     'rotation_speed':rotation_speed,
-                    'alliance':data['alliance'],
                     'stats':stats['base_stats']
                 }
         return (pos, data)

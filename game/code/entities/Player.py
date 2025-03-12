@@ -5,10 +5,9 @@ from entities.EntitiesBase import EntitiesBase
 
 
 class Player(EntitiesBase):
-    def __init__(self, groups, scale, surf, pos, data):
-        super().__init__(groups, scale, surf, pos)
+    def __init__(self, groups, scale, surf, pos, alliance, order, data):
+        super().__init__(groups, scale, surf, pos, alliance, order)
 
-        self.alliance = data['alliance']
         self.direction = pygame.math.Vector2()
         self.stats = data['stats']
         self.attack_event=data['attack_event']
