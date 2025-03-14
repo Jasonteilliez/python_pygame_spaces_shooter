@@ -14,5 +14,10 @@
     "asteroid_spritesheet": {
         "folder":"enemy",
         "file":"asteroid.png" 
+    },
+    "battleship_spritesheet": {
+        "folder":"enemy",
+        "file":"battleship.png" 
     }
+
 }

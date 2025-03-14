@@ -7,13 +7,15 @@ from entities.Star import Star
 from entities.Player import Player
 from entities.Bullet import Bullet
 from entities.Asteroid import Asteroid
+from entities.Battleship import Battleship
 
 
 class Spawner:
-    def __init__(self, visible_sprite):
+    def __init__(self, sprite_groups, attack_event):
         self.basedir = path.dirname(path.dirname(path.dirname(__file__)))
         self.display_surface = pygame.display.get_surface()
-        self.visible_sprite = visible_sprite
+        self.sprite_groups = sprite_groups
+        self.attack_event = attack_event
 
         self.entities_type = self.init_entities_type()
         self.spritesheet = self.init_spritesheet()
@@ -41,7 +43,8 @@ class Spawner:
             "player": Player,
             "star": Star,
             "asteroid": Asteroid,
-            "bullet": Bullet
+            "bullet": Bullet,
+            "battleship": Battleship
         }
 
 
@@ -84,6 +87,7 @@ class Spawner:
             data=data
         )
 
+
     def options(self, entity_type, name, data, pos):
         match entity_type:
             case "player":
@@ -94,6 +98,8 @@ class Spawner:
                         'y':self.display_surface.get_height()/2
                     }
                 data['stats'] = stats['base_stats']
+                data['bullet_sprites'] = self.sprite_groups['player_bullet_sprites']
+                data['attack_event'] = self.attack_event
             case "star":
                 if not pos:
                     pos={
@@ -120,6 +126,16 @@ class Spawner:
                     'rotation_speed':rotation_speed,
                     'stats':stats['base_stats']
                 }
+            case "battleship":
+                stats = self.stats_data[name]
+                if not pos:
+                    pos={
+                        'x':self.display_surface.get_width()/2,
+                        'y':self.display_surface.get_height()/2
+                    }
+                data['stats'] = stats['base_stats']
+                data['bullet_sprites'] = self.sprite_groups['ennemy_bullet_sprites']
+                data['attack_event'] = self.attack_event
         return (pos, data)
 
 

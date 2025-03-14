@@ -20,7 +20,13 @@ class Level:
         self.ennemy_bullet_sprites = pygame.sprite.Group()
 
         self.last_time = time()
-        self.spawner = Spawner(self.visible_sprites)
+        self.spawner = Spawner(
+            sprite_groups={
+                "player_bullet_sprites": self.player_bullet_sprites,
+                "ennemy_bullet_sprites": self.ennemy_bullet_sprites
+            },
+            attack_event= self.attack_event
+        )
 
         levels_path = path.join(self.basedir, "code", "levels", "levels.json")
         with open(levels_path)as json_levels:
@@ -30,6 +36,11 @@ class Level:
         self.init_level()
         self.player = self.init_player()
         self.init_wave()
+
+        self.spawn_entity(groups=[self.visible_sprites,self.ennemy_sprites], name="medium_red_hunter", alliance='ennemy',pos={
+            'x':100,
+            'y':100
+        })
 
 
     def spawn_entity(self, groups, name, alliance="enemy", data={}, pos=None):
@@ -71,10 +82,7 @@ class Level:
 
 
     def init_player(self):
-        return self.spawn_entity(groups=self.visible_sprites, name="player", alliance='player', data={
-            'attack_event':self.attack_event,
-            'player_bullet_sprites': self.player_bullet_sprites
-        })
+        return self.spawn_entity(groups=self.visible_sprites, name="player", alliance='player')
 
 
     def init_wave(self):

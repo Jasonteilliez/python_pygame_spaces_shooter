@@ -13,7 +13,7 @@ class Player(EntitiesBase):
         self.attack_event=data['attack_event']
         self.is_attacking = False
         self.attack_time = None
-        self.player_bullet_sprites = data['player_bullet_sprites']
+        self.bullet_sprites = data['bullet_sprites']
 
         self.stats = {
             "max_health": data['stats']['max_health'],
@@ -95,7 +95,7 @@ class Player(EntitiesBase):
         }
 
         bullet={
-            'groups': self.player_bullet_sprites,
+            'groups': self.bullet_sprites,
             'pos': pos, 
             'direction': direction, 
             'alliance': 'player_bullet', 

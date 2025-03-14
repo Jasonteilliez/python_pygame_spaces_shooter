@@ -6,7 +6,7 @@ class Asteroid(EntitiesBase):
     def __init__(self, groups, scale, surf, pos, alliance, order, data):
         super().__init__(groups, scale, surf, pos, alliance, order)
 
-        self.direction= data['direction']
+        self.direction=data['direction']
         self.rotation_speed=data['rotation_speed']
         self.angle=0
 
