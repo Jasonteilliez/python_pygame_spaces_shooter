@@ -10,5 +10,8 @@
         "small_asteroid":[10, "neutral"],
         "medium_asteroid":[5, "neutral"],
         "large_asteroid":[3, "neutral"]
+    },
+    "4":{
+        "medium_red_hunter":[5, "ennemy"]
     }
 }

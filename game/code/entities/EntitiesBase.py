@@ -9,7 +9,7 @@ class EntitiesBase(pygame.sprite.Sprite):
         self.scale = scale
         self.surf = surf
         self.scale_surf = pygame.transform.scale(surf,pygame.math.Vector2(surf.get_size()) * scale)
-        self.image = self.surf
+        self.image = self.scale_surf
         self.rect = self.image.get_frect(center = (pos['x'], pos['y']))
 
         self.mask = pygame.mask.from_surface(self.image)

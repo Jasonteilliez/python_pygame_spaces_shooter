@@ -16,6 +16,7 @@ class Spawner:
         self.display_surface = pygame.display.get_surface()
         self.sprite_groups = sprite_groups
         self.attack_event = attack_event
+        self.player = None
 
         self.entities_type = self.init_entities_type()
         self.spritesheet = self.init_spritesheet()
@@ -77,6 +78,17 @@ class Spawner:
         pos, data = self.options(entity_type, name, data, pos)
 
         # Return #
+        if entity_type == "player":
+            self.player = entity(
+            groups=groups,
+            scale=scale,
+            surf=surf,
+            order=order,
+            alliance=alliance,
+            pos=pos,
+            data=data
+        )
+            return self.player
         return entity(
             groups=groups,
             scale=scale,
@@ -114,7 +126,8 @@ class Spawner:
                 if not pos:
                     pos = self.get_random_outside_spawn_position()
                 direction = pygame.math.Vector2(randint(-10,10),randint(-10,10))
-                direction = direction.normalize()
+                if direction.magnitude() != 0:
+                    direction = direction.normalize()
                 speed = randint(stats['mov_speed_min'],stats['mov_speed_max'])
                 rotation_speed = choice([
                     randint(-stats['rotation_speed_max'],-stats['rotation_speed_min']),
@@ -129,13 +142,11 @@ class Spawner:
             case "battleship":
                 stats = self.stats_data[name]
                 if not pos:
-                    pos={
-                        'x':self.display_surface.get_width()/2,
-                        'y':self.display_surface.get_height()/2
-                    }
+                    pos = self.get_random_outside_spawn_position()
                 data['stats'] = stats['base_stats']
                 data['bullet_sprites'] = self.sprite_groups['ennemy_bullet_sprites']
                 data['attack_event'] = self.attack_event
+                data['player'] = self.player
         return (pos, data)
 
 

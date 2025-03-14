@@ -31,16 +31,11 @@ class Level:
         levels_path = path.join(self.basedir, "code", "levels", "levels.json")
         with open(levels_path)as json_levels:
             self.levels = load(json_levels)
-        self.level = 3
+        self.level = 4
 
         self.init_level()
         self.player = self.init_player()
         self.init_wave()
-
-        self.spawn_entity(groups=[self.visible_sprites,self.ennemy_sprites], name="medium_red_hunter", alliance='ennemy',pos={
-            'x':100,
-            'y':100
-        })
 
 
     def spawn_entity(self, groups, name, alliance="enemy", data={}, pos=None):

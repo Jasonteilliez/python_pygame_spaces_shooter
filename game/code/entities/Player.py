@@ -113,6 +113,7 @@ class Player(EntitiesBase):
             if current_time - self.attack_time >= self.stats['attack_speed']:
                 self.is_attacking = False
 
+
     def update(self, dt):
         self.input()
         self.cooldowns()
