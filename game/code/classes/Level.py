@@ -35,7 +35,6 @@ class Level:
 
         self.init_level()
         self.player = self.init_player()
-        self.init_wave()
 
 
     def spawn_entity(self, groups, name, alliance="enemy", data={}, pos=None):
@@ -81,10 +80,15 @@ class Level:
 
 
     def init_wave(self):
-        level_data = self.levels[str(self.level)]
-        for enemy_type, value in level_data.items():
-            for _ in range(value[0]):
-                self.spawn_entity(groups=[self.visible_sprites,self.ennemy_sprites], name=enemy_type, alliance=value[0])
+        if (len(self.ennemy_sprites) == 0):
+            level_data = self.levels[str(self.level)]
+            for enemy_type, value in level_data.items():
+                for _ in range(value[0]):
+                    self.spawn_entity(groups=[self.visible_sprites,self.ennemy_sprites], name=enemy_type, alliance=value[0])
+            self.level +=1
+
+            if self.level > len(self.levels):
+                self.level = 1
 
 
     def collision(self):
@@ -93,6 +97,12 @@ class Level:
         for s in sprite:
             self.player.current_health -= s.stats["impact_dommage"] 
             s.current_health -= self.player.stats["impact_dommage"]
+
+        # player - ennemy attack collision
+        sprite = pygame.sprite.spritecollide(self.player, self.ennemy_bullet_sprites, False, pygame.sprite.collide_mask)
+        for bullet in sprite:
+            self.player.current_health -= bullet.stats["impact_dommage"] 
+            bullet.kill()
 
         # enemy - player attack collision
         for bullet in self.player_bullet_sprites:
@@ -116,3 +126,4 @@ class Level:
         self.visible_sprites.update(dt)
         self.visible_sprites.draw(self.display_surface)
         self.collision()
+        self.init_wave()

@@ -87,7 +87,8 @@ class Player(EntitiesBase):
         direction = pygame.math.Vector2()
         direction.x = dx
         direction.y = dy
-        direction = direction.normalize()
+        if direction.magnitude() != 0:
+            direction = direction.normalize()
 
         pos = {
          'x': self.rect.centerx + 15*direction.x*self.scale,
@@ -100,7 +101,7 @@ class Player(EntitiesBase):
             'direction': direction, 
             'alliance': 'player_bullet', 
             'name': 'small_red_bullet',
-            'speed': 300,
+            'speed': 500,
             'impact_dommage':self.stats['attack_dommage']
         }
         self.attack_event(bullet)

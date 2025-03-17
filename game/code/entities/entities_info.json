@@ -5,7 +5,7 @@
         "base_stats":{
             "max_health": 5,
             "attack_dommage": 1,
-            "attack_speed": 0.05,
+            "attack_speed": 0.1,
             "impact_dommage": 1,
             "mov_speed": 200
         }
@@ -52,12 +52,17 @@
         "base_stats":{
             "max_health": 2,
             "attack_dommage": 1,
-            "attack_speed": 0.3,
+            "attack_speed": 0.5,
             "impact_dommage": 1,
             "mov_speed": 100
         }
     },
     "small_red_bullet":{
+        "entity_type":"bullet",
+        "order":"bullet",
+        "base_stats":{}
+    },
+    "small_blue_bullet":{
         "entity_type":"bullet",
         "order":"bullet",
         "base_stats":{}

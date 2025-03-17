@@ -39,7 +39,7 @@ class Battleship(EntitiesBase):
         
         distance = dist(self.rect.center, self.player.rect.center)/self.scale
         if distance < 200: self.state = "step_back"
-        elif distance < 300: self.state = "attack"
+        elif distance < 300: self.state = "circle"
         elif distance < 400: self.state = "follow"
         else : self.state = "patrol"
 
@@ -69,7 +69,7 @@ class Battleship(EntitiesBase):
             self.direction = self.direction.normalize()
 
 
-    def attack(self):
+    def circle(self):
 
         if self.engaging_direction:
             self.direction.x = -(self.player.rect.centery - self.rect.centery)
@@ -79,7 +79,6 @@ class Battleship(EntitiesBase):
             self.direction.y = -(self.player.rect.centerx - self.rect.centerx)
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
-
 
 
     def step_back(self):
@@ -120,16 +119,57 @@ class Battleship(EntitiesBase):
         self.mask = pygame.mask.from_surface(self.image) 
 
 
-    def update(self, dt):
-        self.distance_with_player()
+    def attack(self):
+        direction = pygame.math.Vector2()
+        direction.x = self.player.rect.centerx - self.rect.centerx
+        direction.y = self.player.rect.centery - self.rect.centery
+        if direction.magnitude() != 0:
+            direction = direction.normalize()
+
+        pos = {
+         'x': self.rect.centerx + 15*direction.x*self.scale,
+         'y': self.rect.centery + 15*direction.y*self.scale
+        }
+
+        bullet={
+            'groups': self.bullet_sprites,
+            'pos': pos, 
+            'direction': direction, 
+            'alliance': 'ennemy_bullet', 
+            'name': 'small_blue_bullet',
+            'speed': 300,
+            'impact_dommage':self.stats['attack_dommage']
+        }
+        self.attack_event(bullet)
+
+
+    def cooldowns(self):
+        current_time = time()
+
+        if self.is_attacking:
+            if current_time - self.attack_time >= self.stats['attack_speed']:
+                self.is_attacking = False
+
+    
+    def action(self):
         if self.state == "patrol" : 
             self.patrol()
         if self.state == "follow":
             self.follow()
-        if self.state == "attack":
-            self.attack()
+        if self.state == "circle":
+            self.circle()
         if self.state == "step_back":
             self.step_back()
+        
+        if self.state != "patrol" and self.is_attacking == False:
+            self.is_attacking = True
+            self.attack_time = time()
+            self.attack() 
+
+    def update(self, dt):
+        self.distance_with_player()
+        self.action()
+        self.cooldowns()
         self.move(dt)
         self.rotate()
 
