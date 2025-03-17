@@ -8,6 +8,8 @@ class Player(EntitiesBase):
     def __init__(self, groups, scale, surf, pos, alliance, order, data):
         super().__init__(groups, scale, surf, pos, alliance, order)
 
+        print(data)
+
         self.direction = pygame.math.Vector2()
         self.stats = data['stats']
         self.attack_event=data['attack_event']

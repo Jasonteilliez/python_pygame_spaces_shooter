@@ -22,16 +22,21 @@ class Level:
         self.last_time = time()
         self.spawner = Spawner(
             sprite_groups={
+                "visible_sprites": self.visible_sprites,
+                "ennemy_sprites": self.ennemy_sprites,
                 "player_bullet_sprites": self.player_bullet_sprites,
                 "ennemy_bullet_sprites": self.ennemy_bullet_sprites
             },
-            attack_event= self.attack_event
+            action={
+            "attack_event": self.attack_event,
+            "spawn_entity": self.spawn_entity
+            }
         )
 
         levels_path = path.join(self.basedir, "code", "levels", "levels.json")
         with open(levels_path)as json_levels:
             self.levels = load(json_levels)
-        self.level = 4
+        self.level = 2
 
         self.init_level()
         self.player = self.init_player()
@@ -79,7 +84,7 @@ class Level:
         return self.spawn_entity(groups=self.visible_sprites, name="player", alliance='player')
 
 
-    def init_wave(self):
+    def spawn_wave(self):
         if (len(self.ennemy_sprites) == 0):
             level_data = self.levels[str(self.level)]
             for enemy_type, value in level_data.items():
@@ -116,7 +121,7 @@ class Level:
             self.player.kill()
         for enemy in self.ennemy_sprites:
             if enemy.current_health <=0:
-                enemy.kill()
+                enemy.destroy()
 
 
     def run(self):
@@ -126,4 +131,4 @@ class Level:
         self.visible_sprites.update(dt)
         self.visible_sprites.draw(self.display_surface)
         self.collision()
-        self.init_wave()
+        self.spawn_wave()

@@ -24,6 +24,7 @@ class Bullet(EntitiesBase):
             self.kill()
 
 
+
     def update(self, dt):
         self.move(dt)
         self.bullet_kill()

@@ -18,5 +18,8 @@ class EntitiesBase(pygame.sprite.Sprite):
         self.order = order
 
     
-        def update(self, dt):
-            pass
+    def destroy(self):
+        self.kill()
+
+    def update(self, dt):
+        pass

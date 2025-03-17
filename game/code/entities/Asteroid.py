@@ -17,7 +17,10 @@ class Asteroid(EntitiesBase):
         }
         self.current_health = self.stats['max_health']
 
-        
+        self.division=data['division']
+        self.spawn_entity=data['spawn_entity']
+        self.division_groups=data['division_groups']
+
 
     def move(self, dt):
         self.rect.centerx += self.direction.x * self.stats["mov_speed"] * dt * self.scale
@@ -43,6 +46,18 @@ class Asteroid(EntitiesBase):
         self.rect = self.image.get_frect(center=self.rect.center) 
         self.mask = pygame.mask.from_surface(self.image)
 
+
+    def destroy(self):
+        
+        if self.division[0]== True:
+            number = randint(2,4)
+            pos = {
+                'x': self.rect.centerx,
+                'y': self.rect.centery
+            }
+            for _ in range(number):
+                self.spawn_entity(groups=self.division_groups, name=self.division[1], alliance=self.alliance, pos=pos)
+        self.kill()
 
     def update(self, dt):
         self.move(dt)

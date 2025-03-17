@@ -166,6 +166,8 @@ class Battleship(EntitiesBase):
             self.attack_time = time()
             self.attack() 
 
+
+
     def update(self, dt):
         self.distance_with_player()
         self.action()

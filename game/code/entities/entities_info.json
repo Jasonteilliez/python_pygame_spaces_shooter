@@ -17,6 +17,7 @@
             "max_health":1,
             "impact_dommage":1
         },
+        "division" :[false, ""],
         "mov_speed_min":50,
         "mov_speed_max":300,
         "rotation_speed_min":50,
@@ -29,6 +30,7 @@
             "max_health":3,
             "impact_dommage":1
         },
+        "division" :[true, "small_asteroid"],
         "mov_speed_min":50,
         "mov_speed_max":225,
         "rotation_speed_min":50,
@@ -37,6 +39,7 @@
     "large_asteroid":{
         "entity_type":"asteroid",
         "order":"enemy",
+        "division" :[true, "medium_asteroid"],
         "base_stats":{
             "max_health":5,
             "impact_dommage":1
